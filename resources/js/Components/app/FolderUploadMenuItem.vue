@@ -1,9 +1,6 @@
 <template>
     <MenuItem>
-        <a
-            href="#"
-            class="text-gray-700 block px-4 py-2 text-sm hover:bg-indigo-200 relative-to"
-        >
+        <a href="#" class="text-gray-700 block px-4 py-2 text-sm relative hover:bg-indigo-200">
             Upload Folders
             <input
                 @change="onChange"

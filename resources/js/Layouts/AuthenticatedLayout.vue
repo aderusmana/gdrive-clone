@@ -39,6 +39,7 @@ import { ref, onMounted } from "vue";
 const page = usePage();
 const fileUploadForm = useForm({
     files: [],
+    relative_paths: [],
     parent_id: null,
 });
 
@@ -47,9 +48,9 @@ const dragOver = ref(false);
 
 //method
 function uploadFiles(files) {
-    console.log(files);
     fileUploadForm.parent_id = page.props.folders.data.id;
     fileUploadForm.files = files;
+    fileUploadForm.relative_paths = [...files].map((f) => f.webkitRelativePath);
 
     fileUploadForm.post(route("file.store"));
 }
