@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class DestroyFilesRequest extends ParentIdBaseRequest
+class FileActionRequest extends ParentIdBaseRequest
 {
 
     /**
