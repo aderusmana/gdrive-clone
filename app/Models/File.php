@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\HasCreaterAndUpdaterTrait;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,4 +74,11 @@ class File extends Model
 
         return number_format($this->size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
     }
+
+    public function moveToTrash(){
+        $this->deleted_at = Carbon::now();
+        return $this->save();
+    }
+
+    
 }

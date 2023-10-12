@@ -31,7 +31,7 @@
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
-                    :href="route('myFiles')"
+                    :href="route('trash')"
                     :active="$page.url == '/trash'"
                     >Trash</NavLink
                 >

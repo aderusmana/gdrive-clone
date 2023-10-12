@@ -1,53 +1,9 @@
 <template>
-    <Head title="Dashboard" />
+    <Head title="Trash" />
     <AuthenticatedLayout>
-        <nav class="flex items-center justify-between p-1 mb-3">
-            <ol class="inline-flex items-center space-x-1 md:space-x-3">
-                <li
-                    v-for="ans of ancestors.data"
-                    :key="ans.id"
-                    class="inline-flex items-center"
-                >
-                    <Link
-                        v-if="!ans.parent_id"
-                        :href="route('myFiles')"
-                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-indigo-600 dark:text-gray-600"
-                    >
-                        <HomeIcon class="w-4 h-4 mr-2" />
-                        My Files
-                    </Link>
-                    <div v-else class="flex items-center">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke-width="1.5"
-                            stroke="currentColor"
-                            class="w-6 h-6 text-gray-700 dark:text-gray-400"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                            />
-                        </svg>
-
-                        <Link
-                            :href="route('myFiles', { folder: ans.path })"
-                            class="ml-1 text-sm font-medium text-gray-700 hover:text-indigo-600 md:ml-2 dark:text-gray-600"
-                        >
-                            {{ ans.name }}
-                        </Link>
-                    </div>
-                </li>
-            </ol>
+        <nav class="flex items-center justify-end p-1 mb-3">
             <div class="space-x-2 flex items-center">
-                <DownloadFilesButton :all="allSelected" :ids="selectedIds" />
-                <DeleteFilesButton
-                    :delete-all="allSelected"
-                    :delete-ids="selectedIds"
-                    @delete="onDelete"
-                />
+            <RestoreFilesButton :all-selected="allSelected" :selected-ids="selectedIds" />
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
@@ -73,27 +29,21 @@
                             scope="col"
                             class="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            Owner
+                            Path
                         </th>
                         <th
                             scope="col"
                             class="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
-                            Last Modified
+                            Deleted At
                         </th>
-                        <th
-                            scope="col"
-                            class="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                        >
-                            Size
-                        </th>
+
                     </tr>
                 </thead>
                 <tbody>
                     <tr
                         v-for="file in allFiles.data"
                         :key="file.id"
-                        @dblclick="openFolder(file)"
                         @click="($event) => toogleFileSelect(file)"
                         class="hover:bg-indigo-100 divide-y divide-gray-200v"
                         :class="selected[file.id] ? 'bg-indigo-50' : 'bg-white'"
@@ -138,7 +88,7 @@
                                     <div
                                         class="text-sm font-medium text-gray-700"
                                     >
-                                        {{ file.owner }}
+                                        {{ file.path }}
                                     </div>
                                 </div>
                             </div>
@@ -149,18 +99,7 @@
                                     <div
                                         class="text-sm font-medium text-gray-700"
                                     >
-                                        {{ file.updated_at }}
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <div class="flex items-center">
-                                <div class="ml-4">
-                                    <div
-                                        class="text-sm font-medium text-gray-700"
-                                    >
-                                        {{ file.size }}
+                                        {{ file.deleted_at }}
                                     </div>
                                 </div>
                             </div>
@@ -181,14 +120,12 @@
 
 <script setup>
 import FileIcon from "@/Components/app/FileIcon.vue";
+import RestoreFilesButton from "@/Components/app/RestoreFilesButton.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { HomeIcon } from "@heroicons/vue/24/solid";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { Head  } from "@inertiajs/vue3";
 import { onMounted, ref, onUpdated, computed } from "vue";
 import { httpGet } from "@/Helper/http-helper.js";
 import Checkbox from "@/Components/Checkbox.vue";
-import DeleteFilesButton from "@/Components/app/DeleteFilesButton.vue";
-import DownloadFilesButton from "@/Components/app/DownloadFilesButton.vue";
 
 // refs
 
@@ -210,13 +147,6 @@ const props = defineProps({
 });
 
 //methods
-function openFolder(file) {
-    if (!file.is_folder) {
-        return;
-    }
-
-    router.visit(route("myFiles", { folder: file.path }));
-}
 
 function loadMore() {
     console.log("load more");
@@ -291,4 +221,7 @@ const selectedIds = computed(() =>
         .filter((a) => a[1])
         .map((a) => a[0])
 );
+
 </script>
+
+

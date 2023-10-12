@@ -1,9 +1,9 @@
 <template>
     <button
-        @click="onDeleteClick"
+        @click="onDeleteForeverClick"
         class="inline-flex items-center gap-1 px-4 py-2 text-md font-medium hover:font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-indigo-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 transition-transform transform hover:scale-105"
     >
-        <svg
+    <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
             fill="currentColor"
@@ -16,13 +16,13 @@
             />
         </svg>
 
-        Delete
+        Delete Forever
     </button>
     <ConfirmationDialog
-        :show="showDeleteDialog"
-        message="Are you sure want to delete selected files?"
-        @cancel="onDeleteCancel"
-        @confirm="onDeleteConfirm"
+        :show="showConfirmationDialog"
+        message="Are you sure want to deleteForever selected files?"
+        @cancel="onDeleteForeverCancel"
+        @confirm="onDeleteForeverConfirm"
     />
 </template>
 
@@ -33,59 +33,56 @@ import { showErrorDialog, showSuccessNotification } from "@/event-bus";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 //refs
-const showDeleteDialog = ref(false);
+const showConfirmationDialog = ref(false);
 //props
 const props = defineProps({
-    deleteAll: {
+    allSelected: {
         type: Boolean,
         default: false,
         required: false,
     },
-    deleteIds: {
+    selectedIds: {
         type: Array,
         required: false,
     },
 });
-const emit = defineEmits(["delete"]);
+const emit = defineEmits(["deleteForever"]);
 //method
 
-function onDeleteClick() {
-    if(!props.deleteAll && !props.deleteIds.length){
-        showErrorDialog('Please select at least one a list of file to  delete')
-        return
+function onDeleteForeverClick() {
+    if (!props.allSelected && !props.selectedIds.length) {
+        showErrorDialog("Please select at least one a list of file to  delete forever");
+        return;
     }
-    showDeleteDialog.value = true;
+    showConfirmationDialog.value = true;
 }
 
-function onDeleteCancel() {
-    showDeleteDialog.value = false;
+function onDeleteForeverCancel() {
+    showConfirmationDialog.value = false;
 }
 
-function onDeleteConfirm(){
-    deleteFilesForm.parent_id = page.props.folders.data.id
-    if(props.deleteAll) {
-        deleteFilesForm.all = true
-    }else{
-
-        deleteFilesForm.ids = props.deleteIds
+function onDeleteForeverConfirm() {
+    if (props.allSelected) {
+        form.all = true;
+    } else {
+        form.ids = props.selectedIds;
     }
-    deleteFilesForm.delete(route('file.destroy'),{
+    form.post(route("file.deleteForever"), {
         onSuccess: () => {
-            showDeleteDialog.value = false;
-            emit("delete");
+            showConfirmationDialog.value = false;
+            emit("deleteForever");
             //Todo show success confirmation
-            showSuccessNotification('Selected File have been deleted');
-        }
-    })
-    console.log("Delete" , props.deleteAll,props.deleteIds)
+            showSuccessNotification("Selected File have been delete forever");
+        },
+    });
 }
 
 //uses
 
 const page = usePage();
-const deleteFilesForm = useForm({
-    all:null,
-    ids:[],
-    parent_id:null
+const form = useForm({
+    all: null,
+    ids: [],
+    parent_id: null,
 });
 </script>

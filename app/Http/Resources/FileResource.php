@@ -27,7 +27,7 @@ class FileResource extends JsonResource
             "updated_at" => $this->updated_at->diffForHumans(),
             "created_by" => $this->created_by,
             "updated_by" => $this->updated_by,
-            "deleted_at" => $this->deleted_at,
+            'deleted_at' => $this->deleted_at ? $this->deleted_at->diffForHumans() : ''
         ];
     }
 }
