@@ -58,8 +58,8 @@ class File extends Model
             }
             $model->path = (!$model->parent->isRoot() ? $model->parent->path . '/' : '') . Str::slug($model->name);
         });
-        static ::deleted(function(File $model) {
-            if(!$model->is_folder){
+        static::deleted(function (File $model) {
+            if (!$model->is_folder) {
                 Storage::delete($model->storage_path);
             }
         });
@@ -75,10 +75,30 @@ class File extends Model
         return number_format($this->size / pow(1024, $power), 2, '.', ',') . ' ' . $units[$power];
     }
 
-    public function moveToTrash(){
+    public function moveToTrash()
+    {
         $this->deleted_at = Carbon::now();
         return $this->save();
     }
 
-    
+    public function deleteForever()
+    {
+        $this->deleteFilesFromStorage([$this]);
+        $this->forceDelete();
+
+    }
+
+    public function deleteFilesFromStorage($files)
+    {
+        foreach ($files as $file) {
+            if ($file->is_folder) {
+                $this->deleteFilesFromStorage($file->children);
+            } else {
+                Storage::delete($file->storage_path);
+            }
+
+
+        }
+    }
+
 }

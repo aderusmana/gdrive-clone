@@ -74,7 +74,7 @@ function onDeleteConfirm(){
             showDeleteDialog.value = false;
             emit("delete");
             //Todo show success confirmation
-            showSuccessNotification('Selected File have been deleted');
+            showSuccessNotification('Selected File have been deleted,the file now in trash');
         }
     })
     console.log("Delete" , props.deleteAll,props.deleteIds)

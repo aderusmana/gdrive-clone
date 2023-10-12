@@ -280,8 +280,21 @@ class FileController extends Controller
         return to_route('trash');
     }
 
-    public function deleteForever()
+    public function deleteForever(TrashFilesRequest $request)
     {
-
+        $data = $request->validated();
+        if($data['all']) {
+            $children = FIle::onlyTrashed()->get();
+            foreach ($children as $child) {
+                $child->deleteForever();
+            }
+        }else{
+            $ids = $data['ids'] ?? [];
+            $children = File::onlyTrashed()->whereIn('id',$ids)->get();
+            foreach ($children as $child) {
+                $child->deleteForever();
+            }
+        }
+        return to_route('trash');
     }
 }

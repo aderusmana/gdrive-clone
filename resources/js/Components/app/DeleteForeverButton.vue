@@ -30,7 +30,7 @@
 import { ref } from "vue";
 import ConfirmationDialog from "../ConfirmationDialog.vue";
 import { showErrorDialog, showSuccessNotification } from "@/event-bus";
-import { useForm, usePage } from "@inertiajs/vue3";
+import { useForm } from "@inertiajs/vue3";
 
 //refs
 const showConfirmationDialog = ref(false);
@@ -67,7 +67,7 @@ function onDeleteForeverConfirm() {
     } else {
         form.ids = props.selectedIds;
     }
-    form.post(route("file.deleteForever"), {
+    form.delete(route("file.deleteForever"), {
         onSuccess: () => {
             showConfirmationDialog.value = false;
             emit("deleteForever");
@@ -79,7 +79,6 @@ function onDeleteForeverConfirm() {
 
 //uses
 
-const page = usePage();
 const form = useForm({
     all: null,
     ids: [],

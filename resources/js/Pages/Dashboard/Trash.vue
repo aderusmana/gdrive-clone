@@ -4,6 +4,7 @@
         <nav class="flex items-center justify-end p-1 mb-3">
             <div class="space-x-2 flex items-center">
             <RestoreFilesButton :all-selected="allSelected" :selected-ids="selectedIds" />
+            <DeleteForeverButton :all-selected="allSelected" :selected-ids="selectedIds" />
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
@@ -126,6 +127,7 @@ import { Head  } from "@inertiajs/vue3";
 import { onMounted, ref, onUpdated, computed } from "vue";
 import { httpGet } from "@/Helper/http-helper.js";
 import Checkbox from "@/Components/Checkbox.vue";
+import DeleteForeverButton from "@/Components/app/DeleteForeverButton.vue";
 
 // refs
 
