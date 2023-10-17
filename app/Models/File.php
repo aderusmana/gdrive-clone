@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -27,6 +28,11 @@ class File extends Model
     public function parent(): BelongsTo
     {
         return $this->belongsTo(File::class, 'parent_id');
+    }
+
+    public function starred():HasOne
+    {
+        return $this->hasOne(Starred_file::class,'file_id','id')->where('user_id',Auth::id());
     }
 
     public function isRoot()

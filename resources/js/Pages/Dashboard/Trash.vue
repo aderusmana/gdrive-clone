@@ -3,8 +3,8 @@
     <AuthenticatedLayout>
         <nav class="flex items-center justify-end p-1 mb-3">
             <div class="space-x-2 flex items-center">
-            <RestoreFilesButton :all-selected="allSelected" :selected-ids="selectedIds" />
-            <DeleteForeverButton :all-selected="allSelected" :selected-ids="selectedIds" />
+            <RestoreFilesButton :all-selected="allSelected" :selected-ids="selectedIds" @delete="resetForm" />
+            <DeleteForeverButton :all-selected="allSelected" :selected-ids="selectedIds" @delete="resetForm" />
             </div>
         </nav>
         <div class="flex-1 overflow-auto">
@@ -190,7 +190,7 @@ function onSelectCheckboxChange(file) {
     }
 }
 
-function onDelete() {
+function resetForm() {
     allSelected.value = false;
     selected.value = {};
 }

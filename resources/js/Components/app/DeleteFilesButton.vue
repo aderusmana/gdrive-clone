@@ -1,11 +1,11 @@
 <template>
     <button
         @click="onDeleteClick"
-        class="inline-flex items-center gap-1 px-4 py-2 text-md font-medium hover:font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-indigo-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 transition-transform transform hover:scale-105"
+        class="inline-flex items-center gap-1 px-4 py-2 text-sm font-medium hover:font-semibold text-gray-900 bg-white border border-gray-200 rounded-lg hover:bg-indigo-100 hover:text-indigo-700 focus:z-10 focus:ring-2 focus:ring-indigo-700 focus:text-indigo-700 transition-transform transform hover:scale-105"
     >
         <svg
             xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
+            viewBox="0 0 28 28"
             fill="currentColor"
             class="w-6 h-6"
         >
@@ -62,7 +62,7 @@ function onDeleteCancel() {
 }
 
 function onDeleteConfirm(){
-    deleteFilesForm.parent_id = page.props.folders.data.id
+    deleteFilesForm.parent_id = page.props.folders.id
     if(props.deleteAll) {
         deleteFilesForm.all = true
     }else{

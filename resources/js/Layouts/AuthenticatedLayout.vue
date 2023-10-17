@@ -17,7 +17,7 @@
             <template v-else>
                 <div class="flex items-center justify-between w-full">
                     <SearchForm />
-                    <UserSettingDropDown />
+                    <UserSettingDropDown class="z-10" />
                 </div>
 
                 <div class="flex-1 flex flex-col overflow-hidden">
