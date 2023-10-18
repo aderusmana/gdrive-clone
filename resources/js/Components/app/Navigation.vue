@@ -19,14 +19,14 @@
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
-                    :href="route('myFiles')"
-                    :active="$page.url == '/share-withme'"
+                    :href="route('shareWithMe')"
+                    :active="$page.url == '/sharewithme'"
                     >Share with me</NavLink
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
-                    :href="route('myFiles')"
-                    :active="$page.url == '/share-byme'"
+                    :href="route('shareByMe')"
+                    :active="$page.url == '/sharebyme'"
                     >Shared by me</NavLink
                 >
                 <NavLink

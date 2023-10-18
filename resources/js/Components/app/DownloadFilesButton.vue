@@ -41,6 +41,8 @@ const props = defineProps({
         type: Array,
         required: false,
     },
+    shareWithMe:false,
+    shareByMe:false
 });
 
 //method
@@ -49,8 +51,8 @@ function download() {
         return;
     }
     const p = new URLSearchParams();
-    if (page.props.folders.id) {
-        p.append("parent_id", page.props.folders.id);
+    if (page.props.folders?.id) {
+        p.append("parent_id", page.props.folders?.id);
     }
 
     if (props.all) {
@@ -60,7 +62,14 @@ function download() {
             p.append("ids[]", id);
         }
     }
-    httpGet(route("file.download") + "?" + p.toString()).then((res) => {
+
+    let url = route('file.download')
+    if(props.shareWithMe){
+        url = route('file.downloadShareWithMe')
+    }else if(props.shareByMe){
+        url = route('file.downloadShareByMe')
+    }
+    httpGet(url + "?" + p.toString()).then((res) => {
         console.log(res);
         if (!res.url) return;
 

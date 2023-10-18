@@ -55,7 +55,7 @@ const dragOver = ref(false);
 
 //method
 function uploadFiles(files) {
-    fileUploadForm.parent_id = page.props.folders.data.id;
+    fileUploadForm.parent_id = page.props.folders.id;
     fileUploadForm.files = files;
     fileUploadForm.relative_paths = [...files].map((f) => f.webkitRelativePath);
 

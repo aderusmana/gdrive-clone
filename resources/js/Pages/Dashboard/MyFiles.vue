@@ -48,6 +48,7 @@
                         @change="showOnlyFavorites"
                         v-model:checked="onlyFavourites"
                 /></lable>
+                <ShareFilesButton :all-selected="allSelected" :selected-ids="selectedIds" />
                 <DownloadFilesButton :all="allSelected" :ids="selectedIds" />
                 <DeleteFilesButton
                     :delete-all="allSelected"
@@ -249,6 +250,7 @@ import Checkbox from "@/Components/Checkbox.vue";
 import DeleteFilesButton from "@/Components/app/DeleteFilesButton.vue";
 import DownloadFilesButton from "@/Components/app/DownloadFilesButton.vue";
 import { showErrorDialog, showSuccessNotification } from "@/event-bus";
+import ShareFilesButton from "@/Components/app/ShareFilesButton.vue";
 
 // refs
 
