@@ -33,6 +33,7 @@ class FileController extends Controller
     public function index(Request $request, string $folder = null)
     {
 
+        $search = $request->get('search');
         if ($folder) {
             $folder = File::query()
                 ->where('created_by', Auth::id())
@@ -48,11 +49,18 @@ class FileController extends Controller
 
         $filesQuery = File::query()
             ->select('files.*')
-            ->where('parent_id', $folder->id)
+            ->with('starred')
             ->where('created_by', Auth::id())
+            ->where('_lft', '!=', 1)
             ->orderBy('is_folder', 'desc')
             ->orderBy('files.created_at', 'desc')
             ->orderBy('files.id', 'desc');
+
+        if ($search) {
+            $filesQuery->where('name', 'like', "%$search%");
+        } else {
+            $filesQuery->where('parent_id', $folder->id);
+        }
 
         if ($favourites === 1) {
             $filesQuery->join('starred_files', 'starred_files.file_id', '=', 'files.id')
@@ -79,11 +87,17 @@ class FileController extends Controller
 
     public function trash(Request $request)
     {
-        $files = File::onlyTrashed()
+        $search = $request->get('search');
+        $query = File::onlyTrashed()
             ->where('created_by', Auth::id())
             ->orderBy('is_folder', 'desc')
-            ->orderBy('deleted_at', 'desc')
-            ->paginate(10);
+            ->orderBy('deleted_at', 'desc');
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
+
+        $files = $query->paginate(10);
 
         $files = FileResource::collection($files);
         if ($request->wantsJson()) {
@@ -400,7 +414,12 @@ class FileController extends Controller
 
     public function shareWithMe(Request $request)
     {
+        $search = $request->get('search');
         $query = File::getShareWithMe();
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
         $files = $query->paginate(10);
 
 
@@ -412,7 +431,12 @@ class FileController extends Controller
     }
     public function shareByMe(Request $request)
     {
+        $search = $request->get('search');
         $query = File::getShareByMe();
+
+        if ($search) {
+            $query->where('name', 'like', "%$search%");
+        }
 
         $files = $query->paginate(10);
 
@@ -473,7 +497,7 @@ class FileController extends Controller
         ];
     }
 
-    private function getDownloadUrl(array $ids ,$zipName)
+    private function getDownloadUrl(array $ids, $zipName)
     {
         if (count($ids) === 1) {
             $file = File::find($ids[0]);
@@ -496,7 +520,7 @@ class FileController extends Controller
             $files = File::query()->whereIn('id', $ids)->get();
             $url = $this->createZip($files);
 
-            $fileName = $zipName. '.zip';
+            $fileName = $zipName . '.zip';
         }
         return [$url, $fileName];
     }

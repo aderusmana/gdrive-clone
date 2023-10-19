@@ -48,7 +48,10 @@
                         @change="showOnlyFavorites"
                         v-model:checked="onlyFavourites"
                 /></lable>
-                <ShareFilesButton :all-selected="allSelected" :selected-ids="selectedIds" />
+                <ShareFilesButton
+                    :all-selected="allSelected"
+                    :selected-ids="selectedIds"
+                />
                 <DownloadFilesButton :all="allSelected" :ids="selectedIds" />
                 <DeleteFilesButton
                     :delete-all="allSelected"
@@ -83,6 +86,13 @@
                             class="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
                         >
                             Owner
+                        </th>
+                        <th
+                            v-if="search"
+                            scope="col"
+                            class="px-10 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                        >
+                            Path
                         </th>
                         <th
                             scope="col"
@@ -203,6 +213,17 @@
                                 </div>
                             </div>
                         </td>
+                        <td v-if="search" class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <div class="ml-4">
+                                    <div
+                                        class="text-sm font-medium text-gray-700"
+                                    >
+                                        {{ file.path }}
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <div class="flex items-center">
                                 <div class="ml-4">
@@ -249,7 +270,7 @@ import { httpGet, httpPost } from "@/Helper/http-helper.js";
 import Checkbox from "@/Components/Checkbox.vue";
 import DeleteFilesButton from "@/Components/app/DeleteFilesButton.vue";
 import DownloadFilesButton from "@/Components/app/DownloadFilesButton.vue";
-import { showErrorDialog, showSuccessNotification } from "@/event-bus";
+import { ON_SEARCH, emitter, showErrorDialog, showSuccessNotification } from "@/event-bus";
 import ShareFilesButton from "@/Components/app/ShareFilesButton.vue";
 
 // refs
@@ -258,6 +279,7 @@ const loadMoreIntersect = ref(null);
 const onlyFavourites = ref(false);
 const allSelected = ref(false);
 const selected = ref({});
+let search = ref("")
 
 const allFiles = ref({
     data: props.files.data,
@@ -265,6 +287,7 @@ const allFiles = ref({
 });
 
 let params = null;
+
 
 //props
 
@@ -355,8 +378,13 @@ onUpdated(() => {
 onMounted(() => {
     // Parse the current URL parameters
     params = new URLSearchParams(window.location.search);
-    console.log(params.get("favourites"))
     onlyFavourites.value = params.get("favourites") === "1";
+    search.value = params.get("search");
+    emitter.on(ON_SEARCH, (value) => {
+        search.value = value
+    })
+
+
     const observer = new IntersectionObserver(
         (entries) =>
             entries.forEach((entry) => entry.isIntersecting && loadMore()),
