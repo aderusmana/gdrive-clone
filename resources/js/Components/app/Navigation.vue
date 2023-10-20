@@ -14,25 +14,25 @@
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
                     :href="route('myFiles')"
-                    :active="$page.url == '/my-files'"
+                    :active="$page.props.route_name == 'myFiles'"
                     >My Files</NavLink
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
                     :href="route('shareWithMe')"
-                    :active="$page.url == '/sharewithme'"
+                    :active="$page.props.route_name == 'shareWithMe'"
                     >Share with me</NavLink
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
                     :href="route('shareByMe')"
-                    :active="$page.url == '/sharebyme'"
+                    :active="$page.props.route_name == 'shareByMe'"
                     >Shared by me</NavLink
                 >
                 <NavLink
                     class="hover:text-indigo-600 hover:bg-indigo-100"
                     :href="route('trash')"
-                    :active="$page.url == '/trash'"
+                    :active="$page.props.route_name == 'trash'"
                     >Trash</NavLink
                 >
             </div>
